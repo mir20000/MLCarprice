@@ -1,9 +1,11 @@
-from flask import Flask, jsonify, request, render_template
-import pickle
+from flask import Flask, request, jsonify, render_template
 import numpy as np
+import pickle
+
 
 app = Flask(__name__)
-reg = pickle.load(open('mlmodel.pkl','rb'))
+model = pickle.load(open('model.pkl', 'rb'))
+
 
 @app.route('/')
 def home():
@@ -12,18 +14,12 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    milage = int(request.form.get('milage'))
-    age = int(request.form.get('age'))
-    carnl = request.form.get('car')
+    int_fun = [[int(x) for x in request.form.values()]]
+    prediction = model.predict(int_fun)
 
-    car = list(carnl)
-    int_car = [int(x) for x in car]
-    car = int_car
-
-    feature_list = [[milage, age] + car]
-
-    prediction = reg.predict(feature_list)
-
-    output = round(prediction[0],2)
+    output = round(prediction[0], 2)
 
     return render_template('index.html', pretxt="The value on that year is Rs.{}".format(output))
+
+
+
