@@ -21,5 +21,8 @@ def predict():
 
     return render_template('index.html', pretxt="The value on that year is Rs.{}".format(output))
 
+if __name__ == "__main__":
+    app.run()
+
 
 
